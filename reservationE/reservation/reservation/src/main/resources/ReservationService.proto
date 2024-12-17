@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+option java_package = "com.example.reservation.stubs";
+option java_multiple_files = true;
+
+// Définition du service GRPC pour la gestion des réservations
+service ReservationService {
+       rpc allReservations (GetAllReservationsRequest) returns (GetAllReservationsResponse);
+       rpc reservationById (GetReservationByIdRequest) returns (GetReservationByIdResponse);
+       rpc saveReservation (SaveReservationRequest) returns (SaveReservationResponse);
+
+    // Mettre à jour une réservation existante
+    rpc updateReservation (UpdateReservationRequest) returns (UpdateReservationResponse);
+
+    // Supprimer une réservation par ID
+    rpc deleteReservation (DeleteReservationRequest) returns (DeleteReservationResponse);
+}
+
+// Message pour une demande de réservation
+message ReservationRequest {
+    int64 clientId = 1;      // ID du client (type int64)
+    int64 chambreId = 2;     // ID de la chambre (type int64)
+    string dateDebut = 3;    // Date de début de la réservation (format ISO 8601 recommandé)
+    string dateFin = 4;      // Date de fin de la réservation (format ISO 8601 recommandé)
+    string preferences = 5;  // Préférences spécifiques du client (par exemple : type de lit)
+}
+
+// Message pour représenter une réservation complète
+message Reservation {
+    string id = 1;           // ID de la réservation (utilisé comme chaîne pour compatibilité)
+    int64 clientId = 2;      // ID du client (type int64)
+    int64 chambreId = 3;     // ID de la chambre (type int64)
+    string dateDebut = 4;    // Date de début de la réservation
+    string dateFin = 5;      // Date de fin de la réservation
+    string preferences = 6;  // Préférences spécifiques
+}
+
+// Messages pour la gestion des réservations
+message GetAllReservationsRequest {}
+
+message GetAllReservationsResponse {
+    repeated Reservation reservations = 1; // Liste de toutes les réservations
+}
+
+message GetReservationByIdRequest {
+    string id = 1; // ID de la réservation à rechercher
+}
+
+message GetReservationByIdResponse {
+    Reservation reservation = 1; // Détails de la réservation
+}
+
+message SaveReservationRequest {
+    ReservationRequest reservation = 1; // Utilise ReservationRequest pour la demande de réservation
+}
+
+message SaveReservationResponse {
+    Reservation reservation = 1;
+}
+
+
+message UpdateReservationRequest {
+    Reservation reservation = 1; // Détails de la réservation à mettre à jour
+}
+
+message UpdateReservationResponse {
+    Reservation reservation = 1; // Détails de la réservation mise à jour
+}
+
+message DeleteReservationRequest {
+    string id = 1; // ID de la réservation à supprimer
+}
+
+message DeleteReservationResponse {
+    bool success = 1; // Indique si la suppression a été effectuée avec succès
+}
